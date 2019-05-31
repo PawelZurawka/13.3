@@ -1,0 +1,101 @@
+@import url("https://fonts.googleapis.com/css?family=Montserrat");
+* {
+  box-sizing: border-box;
+  margin: 0;
+}
+
+body {
+  background-color: #846523;
+  font-family: 'Montserrat', sans-serif;
+}
+
+.header {
+  text-align: center;
+  text-transform: capitalize;
+  font-size: 25px;
+  background-color: #f2c05c;
+  margin: 0;
+  padding: 20px;
+}
+
+.container {
+  text-align: center;
+  margin: 40px auto;
+}
+
+.buttons {
+  padding: 20px;
+  margin: 20px;
+  border-radius: 5px;
+  border: none;
+  width: 200px;
+  font-weight: bold;
+  font-size: 20px;
+  cursor: pointer;
+  text-transform: uppercase;
+  outline: none;
+}
+
+#rock-btn {
+  background-color: darkgrey;
+}
+
+#paper-btn {
+  background-color: #ddd2d2;
+}
+
+#scissors-btn {
+  background-color: #f6f7cf;
+}
+
+#rock-btn:hover, #paper-btn:hover, #scissors-btn:hover {
+  background-color: #FFF;
+}
+
+#result-output {
+  padding: 20px;
+  font-size: 30px;
+}
+
+.score-header {
+  margin-top: 30px;
+  font-size: 40px;
+  margin-bottom: 30px;
+  padding-top: 0;
+  line-height: 0;
+}
+
+#player, #pc {
+  font-size: 25px;
+}
+
+#rounds-left, #rounds {
+  font-size: 30px;
+}
+
+.rounds {
+  font-size: 30px;
+  margin: 20px;
+}
+
+#new-game-btn {
+  width: 150px;
+  padding: 15px;
+  font-size: 20px;
+  font-weight: bold;
+  border-radius: 5px;
+  border: none;
+  cursor: pointer;
+  outline: none;
+  margin: 20px;
+}
+
+#new-game-btn:hover {
+  background-color: #FFF;
+}
+
+#new-game-output {
+  font-size: 30px;
+  margin: 20px;
+}
+/*# sourceMappingURL=style.css.map */

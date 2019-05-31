@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <title>13.3</title>
+        <meta name="description" content="">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <link rel="stylesheet" href="css/style.css">
+    </head>
+    <body>
+      <div class="header">
+        <h1>rock paper scissors</h1>
+      </div>
+      <div class="container">
+        <button id="new-game-btn">New Game</button>
+        <div id="new-game-output"></div>
+        <div id="buttons">
+          <button class="buttons" id="rock-btn" data-move="ROCK">rock</button>
+          <button class="buttons" id="paper-btn" data-move="PAPER">paper</button>
+          <button class="buttons" id="scissors-btn" data-move="SCISSORS">scissors</button>
+        </div>
+        <div id="result-output"></div>
+        <div id="results">
+          <h5 class="score-header">Score</h5>
+          <div id="player">Player: <span id="player-result"> 0</span></div>
+          <div id="pc">PC: <span id="pc-result"> 0</span></div>
+        </div>
+        <div class="rounds">Round: <span id="round"> 0</span></div>
+        <div class="rounds">Rounds left: <span id="rounds-left"> 0</span></div>
+      </div>
+    <script src="js/script.js" async defer></script>
+    </body>
+</html>
