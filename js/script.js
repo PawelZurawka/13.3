@@ -9,12 +9,15 @@ var outputRound = document.getElementById('round');
 var outputRoundsLeft = document.getElementById('rounds-left');
 var newGameBtn = document.getElementById('new-game-btn');
 var newGameOutput = document.getElementById('new-game-output');
+var progressTable = document.querySelector('.progressTable');
+var tableHeader = document.querySelector('.modal h1');
 
-var results = {
+var params = {
   round: 0,
   userResult: 0,
   computerResult: 0,
   roundsLeft: 0,
+  progress: []
 };
 //Block buttons
 var blockButtons = function (event) {
@@ -33,24 +36,27 @@ newGameBtn.addEventListener('click', function() {
 
   if (numberOfRounds == null || numberOfRounds == '') {
     newGameOutput.innerHTML = ('Enter the number of rounds!');
+    blockButtons(true);
   }
 
   else if (!isNaN(numberOfRounds)) {
-    results.roundsLeft = numberOfRounds;
-    outputRoundsLeft.innerHTML = results.roundsLeft;
+    params.roundsLeft = numberOfRounds;
+    outputRoundsLeft.innerHTML = params.roundsLeft;
     newGameMsg(choice);
-    results.round = 0;
-    outputRound.innerHTML = results.round;
-    results.userResult = 0;
-    outputPlayerScore.innerHTML = results.userResult;
-    results.computerResult = 0;
-    outputComputerScore.innerHTML = results.computerResult;
+    params.round = 0;
+    outputRound.innerHTML = params.round;
+    params.userResult = 0;
+    outputPlayerScore.innerHTML = params.userResult;
+    params.computerResult = 0;
+    outputComputerScore.innerHTML = params.computerResult;
+    blockButtons(false);
   }
 
   else {
     newGameOutput.innerHTML = ('It is not a number!');
+    blockButtons(true);
   }
-  blockButtons(false);
+  resetTable();
 });
 
 var resultsOutput = function(text) {
@@ -65,8 +71,8 @@ newGameMsg(firstMessage);
 //Player move
 var playerMove = function(playerChoice) {
   var computerChoice = randomPcChoice();
-  results.roundsLeft--;
-  outputRoundsLeft.innerHTML = results.roundsLeft;
+  params.roundsLeft--;
+  outputRoundsLeft.innerHTML = params.roundsLeft;
 
   if (computerChoice === 1) {
     computerChoice = 'ROCK';
@@ -80,44 +86,59 @@ var playerMove = function(playerChoice) {
   
   if (playerChoice === computerChoice) {
     resultsOutput('DRAW!<br>You and Computer played:<br>' + playerChoice);
-    results.round += 1;
-    outputRound.innerHTML = results.round;
+    params.round++;
+    outputRound.innerHTML = params.round;
+    params.winner = 'DRAW';
   }
   else if ((playerChoice === 'ROCK' && computerChoice === 'SCISSORS') || (playerChoice === 'PAPER' && computerChoice === 'ROCK') || (playerChoice === 'SCISSORS' && computerChoice === 'PAPER')) {
     resultsOutput('YOU WON!<br>You played: ' + playerChoice + '<br>' + 'Computer played: ' + computerChoice);
-    results.userResult += 1;
-    outputPlayerScore.innerHTML = results.userResult;
-    results.round += 1;
-    outputRound.innerHTML = results.round;
+    params.userResult++;
+    outputPlayerScore.innerHTML = params.userResult;
+    params.round++;
+    outputRound.innerHTML = params.round;
+    params.winner = 'PLAYER';
   }
   else {
     resultsOutput('YOU LOST!<br>You played: ' + playerChoice + '<br>' + 'Computer played: ' + computerChoice);
-    results.computerResult += 1;
-    outputComputerScore.innerHTML = results.computerResult;
-    results.round += 1;
-    outputRound.innerHTML = results.round;
+    params.computerResult ++;
+    outputComputerScore.innerHTML = params.computerResult;
+    params.round ++;
+    outputRound.innerHTML = params.round;
+    params.winner = 'COMPUTER';
   }
 
-  if (results.roundsLeft === 0) {
+  if (params.roundsLeft === 0) {
     endGame();
   }
   else {
     newGameMsg(choice);
   }
+  params.progress.push({
+    gameRounds: params.round,
+    gamePlayerMove: playerChoice,
+    gameComputerMove: computerChoice,
+    roundWinner: params.winner,
+    finalResult: params.userResult + ' - ' + params.computerResult
+});
 };
 
 var endGame = function() {
-  if (results.userResult > results.computerResult) {
+  if (params.userResult > params.computerResult) {
+    tableHeader.innerHTML = ('GAME OVER<br><strong>YOU</strong> won entire game!');
     resultsOutput('GAME OVER<br><strong>YOU</strong> won entire game!');
   }
-  else if (results.userResult < results.computerResult) {
+  else if (params.userResult < params.computerResult) {
+    tableHeader.innerHTML = ('GAME OVER<br><strong>COMPUTER</strong> won entire game!');
     resultsOutput('GAME OVER<br><strong>COMPUTER</strong> won entire game!');
   }
-  else if (results.userResult == results.computerResult) {
+  else if (params.userResult == params.computerResult) {
+    tableHeader.innerHTML = ('GAME OVER<br><strong>DRAW!</strong>');
     resultsOutput('GAME OVER<br><strong>DRAW!</strong>');
   }
   newGameMsg(firstMessage);
   blockButtons(true);
+  showModal();
+  buildTable();
 };
 
 //Player choice
@@ -126,7 +147,60 @@ for (var i = 0; i < buttons.length; i++) {
   self.addEventListener('click', function (event) {  
       playerMove(event.currentTarget.dataset.move);
   }, false);
-  if (results.roundsLeft === 0) {
+  if (params.roundsLeft === 0) {
     blockButtons(true);
+  }
+}
+
+//MODAL
+var modal = document.querySelector('#modal');
+var overlay = document.querySelector('#modal-overlay');
+
+function showModal(){
+  //event.preventDefault();
+  overlay.classList.add('show');
+  modal.classList.add('show');
+}
+
+//CLOSE MODAL
+function closeModal() {
+  overlay.classList.remove('show');
+}
+
+var closeButton = document.querySelector('#modal .close-modal');
+closeButton.addEventListener('click', closeModal);
+overlay.addEventListener('click', closeModal);
+
+//CLOSE MODAL ESC BUTTON
+document.addEventListener('keyup', function(e) {
+  if(e.keyCode === 27) {
+    closeModal();
+  }
+});
+
+modal.addEventListener('click', function(event) {
+  event.stopPropagation();
+});
+
+//TABLE
+function resetTable() {
+  params.wins = 0;
+  params.lost = 0;
+  params.round = 0;
+  params.userResult = 0;
+  params.computerResult = 0;
+  params.winner = 0;
+  params.progress = [];
+}
+
+function buildTable() {
+   for (var i = 0; i < params.progress.length; i++) {
+     var tbody = document.getElementById('tableBody');
+     var tr = document.createElement('tr');
+     //var td = document.createElement('td');
+     tbody.appendChild(tr);
+     //tr.appendChild(td);
+     var td = '<td>'+ params.progress[i].gameRounds + '</td>' + '<td>' + params.progress[i].gamePlayerMove + '</td>' + '<td>' + params.progress[i].gameComputerMove + '</td>' + '<td>' + params.progress[i].roundWinner + '</td>' + '<td>' + params.progress[i].finalResult + '</td>';
+     tr.innerHTML = td;
   }
 }
