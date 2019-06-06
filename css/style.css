@@ -116,17 +116,13 @@ body {
   height: 100%;
   z-index: 999;
   background: rgba(0, 0, 0, 0.5);
-  -ms-flex-pack: center;
-      justify-content: center;
-  -ms-flex-align: center;
-      align-items: center;
+  justify-content: center;
+  align-items: center;
 }
 
 .show {
-  display: -ms-flexbox;
   display: flex;
-  -ms-flex-direction: column;
-      flex-direction: column;
+  flex-direction: column;
 }
 
 .modal {
@@ -185,4 +181,5 @@ td {
   font-size: 20px;
   padding: 5px 10px;
 }
+
 /*# sourceMappingURL=style.css.map */
